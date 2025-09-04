@@ -2,20 +2,19 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 
 import uvicorn
+from src.routers.pdf import router
 
 app = FastAPI(
     title="PDFPilot",
     description=(
-        "AI-powered 'Chat-Attached-to-GPT' service for PDFs. "
+        "AI-powered CAG service for PDFs. "
         "Upload a document, ask questions, get contextual answers."
     ),
-    version="1.0.0"
+    version="1.0.0",
 )
 
-# app.include_router(
-#     prefix="/api/v1"
-#     tags=["pdf", "chat"]
-# )
+app.include_router(router, prefix="/api/v1", tags=["Routes"])
+
 
 # Simple HTML & CSS page that represent the PDFPilot
 @app.get("/", response_class=HTMLResponse)
@@ -80,5 +79,8 @@ def read_root():
     </html>
     """
 
+
 if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run(
+        "main:app", host="127.0.0.1", port=8000, reload=True
+    )  # replace app with "main:app" in prod
